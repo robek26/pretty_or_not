@@ -1,0 +1,54 @@
+.custom-top-header {
+   display: block;
+   margin-left: auto;
+   margin-right: auto; 
+   margin-top : 45px; 
+   
+}
+
+.custom-title{
+	text-align : center;
+	margin: auto; 
+	font-size: 30px;
+	font-family: 'Helvetica Neue', Helvetica;
+	color : #444;
+	margin-top : 10px; 
+}
+
+.custom-span{
+	font-family: 'Helvetica Neue', Helvetica;
+}
+
+.custom-top-space{
+	margin-top:15px;
+	margin-bottom:15px;
+	padding-bottom: 10px;
+}
+
+.custom-panel{
+	margin-top:5px;
+	margin-bottom:30px;
+	padding-bottom: 10px;
+}
+
+.custom-para{
+	margin-top:20px;
+	margin-bottom:20px;
+	margin-left:20px;
+	display:block;
+}
+
+
+.custom-txt-bigger{
+	max-width: 100%;
+	line-height: 22px;
+	overflow-y: scroll;
+	overflow-x: scroll;
+	height: 65px;
+	cursor: text;
+}
+
+
+
+
+

@@ -1,0 +1,448 @@
+<html>
+<head>
+
+
+<link rel="stylesheet" href="bootstrap3/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap3/css/bootstrap-tagsinput.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+div.custom-gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 250px;
+    height: 400px;
+    position: relative;
+}
+
+div.custom-gallery:hover {
+    border: 1px solid #777;
+}
+
+div.custom-gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.custom-desc {
+    padding: 15px;
+    text-align: center;
+    font-size : 14px;
+    height: 60px;
+    position: absolute;
+    bottom: 0; /* attaches the element to the bottom */
+    left: 0; /* attaches the element to the left-side */
+    right: 0; /* attaches the element to the right-side */
+
+}
+
+.gal-img{
+  width: auto;
+    height: auto;
+    position: absolute;  
+    top: 0;  
+    bottom: 0;  
+    left: 0;  
+    right: 0;  
+    margin: auto;
+  max-height: 300px;
+}
+
+
+
+
+</style>
+</head>
+<body>
+  <div class="container" id="first_page" style = "display:block;">
+          <div class="row">
+            <img src='imgs/logo10.png' class="img-responsive custom-top-header" style = 'height : 100px;' />
+          	<h5 class = 'custom-title' style='font-size:25px;'>Pretty Or Not</h5>
+          </div>
+
+          <div class="row" >
+            <div class="col-sm-2"></div>
+             <div class="col-sm-8">
+              <div class = "row panel custom-panel" style = 'margin-left:2px;margin-right:2px;'>
+                     
+                     <div id="img_container" class = "row" style = "display:block;"> 
+                           <div class="col-sm-2"></div>
+                            <div class="col-sm-8" style='position:relative;'>
+                              <p style='text-align:center;font-size:20px;padding-top:20px;color:#888;font-family: "Helvetica Neue", Helvetica;' id='img_counter'></p>
+                               <img class='img-responsive custom-top-header' src = 'http://localhost:22000/imgs/training_set/0.jpg' style='height:300px;' id = 'img-to-choose'  />
+                               <img id = 'like-img' src='imgs/like.png' style='max-height:80px;position:absolute;top:30;bottom:0;left:210;bottom:0;margin:auto;width:auto;height:auto;display:none;'/>
+                               <img id = 'dislike-img' src='imgs/dislike.png' style='max-height:80px;position:absolute;top:30;bottom:0;left:210;bottom:0;margin:auto;width:auto;height:auto;display:none;'/>
+                            </div>
+                            <div class="col-sm-2"></div>
+                    </div>
+              </div>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+         <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <input type = "checkbox" name="chkkey" id="use_key_chk">&nbsp;&nbsp;&nbsp;Enable to use Left and right keys to select Yes/No
+            </div>
+            <div class="col-sm-4"></div> 
+         </div>
+
+        <div class="row custom-top-space" style = 'padding-top : 10px;margin-top:5px;'>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-2">
+                <button id = 'btn_pretty_yes' type="button" class="btn btn-success" style = 'width: 100%;'>Yes</button>
+            </div>
+            <div class="col-sm-2">
+                <button id = 'btn_pretty_no' type="button" class="btn btn-danger" style = 'width: 100%;'>No</button>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog" >
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class = "container" style = 'width:100%;'>
+                  <div  class = "row" id='processing-modal-body' style='display:block;'>
+                          <div class="row" style = 'width:100%;'>
+                            <div class='col-sm-2' >
+                              <img src='imgs/loading1.gif' style = 'width:100%;'/>
+                            </div>
+                            <div class='col-sm-9' style = "margin-top:13px;">
+                              <h5 style='color : #555;'>Please wait few moments while the data is analyzed...  </h5>
+                            </div>
+                            <div class='col-sm-1' style = "margin-top:13px;">
+                              <h4 style='color : #555;cursor:pointer;' id="abort_submit">  X  </h4>
+                            </div>
+                          </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+          
+  </div>
+</div>
+</div>
+
+
+
+  <div class="container" id="second_page" style = "display:none;" >
+        <div class="row" style = 'background-color : #fff;'>
+               <img id='go_home' src='imgs/logo10.png' class="img-responsive custom-top-header"  style = "height : 100px;"/>
+               <h5 class = 'custom-title' style='font-size:25px;'>Pretty Or Not</h5>
+        </div>
+        <!-- Overall Sentiment -->
+
+        <div class="row custom-top-space" style="background-color:#fff;">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <div class="row">
+               <ul class="nav nav-tabs nav-justified">
+                 <li class="active" id='tab_pg_li'><a href="#" id='tab_lf'>Pretty Girls</a></li>
+                 <li id='tab_npg_li'><a href="#" id='tab_fb'>Ugly Girls</a></li>
+                 
+            </ul>
+              
+            </div>
+           </div>
+        </div>
+
+        
+
+        <!-- Image Gallery -->
+
+      <div class="row" id='res-img-gallery'> 
+          
+          <!-- images from js are listed here -->
+
+      </div>
+
+        
+
+  </div>
+
+</body>
+<script src='js/jquery203.min.js'></script>
+<script src='bootstrap3/js/bootstrap.min.js'></script>
+<script src='bootstrap3/js/bootstrap-tagsinput.js'></script>
+<script src='js/jquery.easypiechart.min.js'></script>
+<script src="js/jquery.easing.min.js"></script>
+<script src='js/sender.js'></script>
+  
+<script>
+
+
+
+// Dealing with the first page
+
+
+$('#second_page').css('display','none');
+$('#first_page').css('display','block');
+
+// get image count
+
+var base_url = 'http://localhost:22000';
+
+var total_count = 0;
+var counter = 0;
+var answers = [];
+
+var xhr = createCORSRequest('GET', base_url + "/img3/training_set/",true);
+xhr.onreadystatechange = function () {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+          if(xhr.status == 200){
+             total_count = xhr.responseText;
+             $('#img_counter').html('1/' + total_count);
+            
+          }
+          
+      }
+  };   
+xhr.send(null);
+
+// dealing with yes / no click
+
+function send_to_server(data){
+   $('#myModal').modal({ backdrop: 'static', keyboard: false });
+   //send data
+
+   var formData = new FormData();
+   formData.append('answers',data);
+
+   if(xhr != null){
+     xhr.abort();
+   }
+
+   xhr = createCORSRequest('POST', "http://127.0.0.1:22000",true);
+   xhr.onreadystatechange = function () {
+        if(xhr.status == 0 && cancel == false){
+          alert('there was a problem communicating with the server');
+          $('#myModal').modal('hide');
+          xhr.abort();
+
+        }
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if(xhr.status == 200){
+              $('#myModal').modal('hide');
+              var data = xhr.responseText;
+              //alert(data);
+              load_result_page(data);
+              
+            }
+            
+        }
+    };
+
+        
+    xhr.send(formData);
+
+
+
+
+
+}
+
+/*
+data = "1,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0";
+send_to_server(data);*/
+
+function load_next_image(counter,total_count,data){
+  if(counter < total_count){
+    $('#img_counter').html((counter + 1) + '/' + total_count);
+    $('#img-to-choose').attr('src',base_url +  "/img3/training_set/" + counter + '.jpg');
+  }
+  else{
+    send_to_server(data);
+  }
+
+}
+
+function show_like_dislike_img(choice){
+  var c = "";
+  if(choice == 1){
+    c = "#like-img";
+  }
+  else{
+     c = "#dislike-img";
+  }
+  $(c).css('display','block');
+  setTimeout(function(){
+     $(c).css('display','none');
+  },100);
+
+  
+}
+
+$('#btn_pretty_yes').on('click',function(){
+    show_like_dislike_img(1);
+    answers.push(1);
+    counter += 1;
+    load_next_image(counter,total_count,answers);
+});
+
+$('#btn_pretty_no').on('click',function(){
+    show_like_dislike_img(0);
+    answers.push(0);
+    counter += 1;
+    load_next_image(counter,total_count,answers);
+
+});
+
+document.onkeydown = function(e) {
+
+   if($( "input:checked" ).length == 1){
+      switch (e.keyCode) {
+          case 37:
+              show_like_dislike_img(1);
+              answers.push(1);
+              counter += 1;
+              load_next_image(counter,total_count,answers);
+              break;
+          case 39:
+              show_like_dislike_img(0);
+              answers.push(0);
+              counter += 1;
+              load_next_image(counter,total_count,answers);
+              break;
+          
+      }
+   }
+};
+
+
+
+// Dealing with the second page
+
+/*
+var answers = '{"negative": {"82": "99.71405048854649%", "52": "99.69323889818043%", "89": "99.49147519655526%", "107": "99.21897300519049%", "65": "99.19361248612404%", "64": "99.05856940895319%", "56": "99.01318876072764%", "74": "98.97162858396769%", "51": "98.80087664350867%", "73": "98.78958808258176%", "108": "98.67764450609684%", "60": "98.6090088263154%", "103": "98.40758182108402%", "62": "98.34234416484833%", "79": "98.28918687999249%", "163": "98.21549970656633%", "102": "98.18893615156412%", "78": "98.12606945633888%", "84": "98.04733227938414%", "86": "97.96957168728113%", "133": "97.82691951841116%", "75": "97.78666011989117%", "68": "97.64908645302057%", "170": "97.5276218727231%", "70": "97.34536781907082%", "101": "97.30910360813141%", "168": "97.05917686223984%", "129": "96.92454859614372%", "92": "96.9212444499135%", "142": "96.49811238050461%", "110": "96.39262966811657%", "116": "96.3818933814764%", "83": "96.31421640515327%", "99": "96.2022103369236%", "100": "95.84896713495255%", "24": "95.49629501998425%", "76": "95.37141919136047%", "88": "95.20192928612232%", "143": "95.18452882766724%", "93": "95.18207348883152%", "112": "95.0970746576786%", "54": "95.04773989319801%", "171": "93.5439981520176%", "111": "93.21673735976219%", "63": "93.14739853143692%", "94": "93.11110228300095%", "122": "92.53027811646461%", "61": "92.01259762048721%", "98": "91.57486036419868%", "144": "91.23561829328537%", "149": "91.23476147651672%", "169": "91.08924865722656%", "95": "90.8261850476265%", "140": "90.63289761543274%", "71": "90.15476480126381%", "27": "90.14968946576118%", "105": "90.13163149356842%", "114": "89.2613634467125%", "124": "88.3180283010006%", "159": "88.11423480510712%", "91": "87.91851252317429%", "72": "86.50951385498047%", "151": "86.4062249660492%", "50": "86.14285886287689%", "85": "85.61433553695679%", "69": "84.39487665891647%", "66": "84.30158644914627%", "59": "84.26225781440735%", "113": "82.87423402070999%", "127": "82.76160657405853%", "81": "81.8689376115799%", "47": "81.75679296255112%", "67": "81.52964115142822%", "135": "81.17540031671524%", "121": "80.25453686714172%", "162": "79.8211321234703%", "28": "79.25469130277634%", "136": "79.16662395000458%", "21": "79.09133583307266%", "77": "78.72709631919861%", "167": "75.74583441019058%", "87": "75.3536269068718%", "53": "75.09008198976517%", "153": "74.83756244182587%", "55": "74.80117082595825%", "58": "74.37135577201843%", "157": "73.45681488513947%", "29": "72.41595387458801%", "156": "72.21595644950867%", "126": "70.95128893852234%", "109": "70.18065750598907%", "120": "69.79689598083496%", "90": "68.80659759044647%", "49": "67.55000352859497%", "154": "67.34620034694672%", "97": "66.48094654083252%", "152": "66.0965085029602%", "25": "65.40809273719788%"}, "positive": {"117": "97.20236659049988%", "172": "96.89388275146484%", "125": "95.11051774024963%", "35": "92.31077432632446%", "40": "92.0913577079773%", "155": "90.19014835357666%", "17": "89.22566771507263%", "0": "86.78693175315857%", "36": "86.62762641906738%", "20": "85.89532375335693%", "148": "84.92584228515625%", "39": "83.18309783935547%", "164": "82.95644521713257%", "150": "82.72668123245239%", "12": "82.40657448768616%", "9": "81.16569519042969%", "15": "80.26472330093384%", "37": "79.93232607841492%", "165": "79.18786406517029%", "141": "78.32725048065186%", "22": "77.19069123268127%", "8": "76.32226347923279%", "1": "74.17953610420227%", "16": "72.57981896400452%", "6": "72.39240407943726%", "10": "71.80584669113159%", "96": "71.30252718925476%", "42": "70.51505446434021%", "5": "69.3150281906128%", "11": "69.02899146080017%", "145": "67.84088611602783%", "161": "66.92696809768677%", "115": "64.7498607635498%", "46": "63.44410181045532%", "31": "62.93864846229553%", "158": "60.267966985702515%", "34": "59.67922806739807%", "43": "59.26033854484558%", "30": "58.33524465560913%", "2": "56.54839873313904%", "48": "55.351752042770386%", "173": "54.63042855262756%", "104": "52.63335108757019%", "4": "51.60002112388611%", "106": "51.01746320724487%", "41": "50.95581412315369%", "131": "48.98340404033661%", "160": "48.38503301143646%", "3": "47.683000564575195%", "33": "47.63722121715546%", "134": "47.45248258113861%", "13": "47.36844003200531%", "18": "47.04989194869995%", "7": "46.483615040779114%", "147": "46.22352421283722%", "132": "45.86813151836395%", "128": "45.39717435836792%", "146": "44.99770998954773%", "119": "44.95894014835358%", "138": "44.037410616874695%", "23": "43.80490481853485%", "130": "43.358391523361206%", "26": "43.24437975883484%", "45": "42.90931522846222%", "123": "42.264342308044434%", "44": "41.11382067203522%", "19": "41.01012647151947%", "118": "41.00082516670227%", "166": "40.0864452123642%", "139": "39.6153599023819%", "14": "39.53324854373932%", "38": "39.17721509933472%", "137": "38.39757442474365%", "57": "36.99841499328613%", "80": "36.05349957942963%", "32": "35.858890414237976%"}}'; */
+
+
+
+function json_to_2d_array(data){
+  result = [];
+  Object.keys(data).forEach(function(key) {
+    //console.log('Key : ' + key + ', Value : ' + data[key])
+    result.push([key,data[key]]);
+  })
+  return result;
+}
+
+function compareSecondColumn(a, b) {
+    if (a[1] === b[1]) {
+        return 0;
+    }
+    else {
+        return (a[1] > b[1]) ? -1 : 1;
+    }
+}
+
+
+
+
+function load_result_page(answers){
+
+  $('#second_page').css('display','block');
+  $('#first_page').css('display','none');
+
+  pos_data = JSON.parse(answers)['positive'];
+  neg_data = JSON.parse(answers)['negative'];
+
+  pos_result = json_to_2d_array(pos_data);
+  neg_result = json_to_2d_array(neg_data);
+
+
+
+  pos_result.sort(compareSecondColumn);
+  neg_result.sort(compareSecondColumn);
+  
+
+  build_page(pos_result,neg_result);
+
+}
+
+
+
+function build_page(pos_result,neg_result){
+
+  html_data = "";
+
+  console.log(pos_result);
+  console.log(neg_result);
+
+  for(pd in pos_result){
+    html_data += '<div class="custom-gallery pos-imgs" style="backround-color:#123;display:block;"><img class="gal-img" src="' + base_url + '/img3/test_set/'+ pos_result[pd][0] +'.jpg" alt="pos img" /><div class="custom-desc">Confidence : '+pos_result[pd][1]+'</div></div>';
+
+  }
+
+  for(nd in neg_result){
+
+    html_data += '<div class="custom-gallery neg-imgs" style="backround-color:#123;display:none;"><img class="gal-img" src="' + base_url + '/img3/test_set/'+ neg_result[nd][0] +'.jpg" alt="pos img" /><div class="custom-desc">Confidence : '+neg_result[nd][1]+'</div></div>';
+
+  }
+
+  $('#res-img-gallery').html(html_data);
+   
+}
+
+
+$('#go_home').on('click',function(){
+     $('#second_page').css('display','none');
+     $('#first_page').css('display','block');
+
+     counter  = 0;
+     answers = [];
+     load_next_image(counter,total_count,answers);
+
+
+});
+  
+
+
+
+
+$('#abort_submit').on('click',function(){
+  cancel = true;
+   xhr.abort();
+   $('#myModal').modal('hide');
+});
+    
+
+
+
+
+// Managing  tab buttons
+
+$('#tab_pg_li').on('click',function(){
+
+    $('#tab_pg_li').attr('class','active');
+    $('#tab_npg_li').attr('class','');
+
+    $('.pos-imgs').css('display','block');
+    $('.neg-imgs').css('display','none');
+    
+});
+
+$('#tab_npg_li').on('click',function(){
+
+    $('#tab_pg_li').attr('class','');
+    $('#tab_npg_li').attr('class','active');
+
+    $('.pos-imgs').css('display','none');
+    $('.neg-imgs').css('display','block');
+
+});
+
+
+
+
+
+
+</script>
+</html>
